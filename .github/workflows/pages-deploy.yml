@@ -52,17 +52,9 @@ jobs:
 
       - name: Test site
         run: |
-          set +e
           bundle exec htmlproofer _site \
             \-\-disable-external \
-            \-\-ignore-urls "/^http:\/\/127.0.0.1/,/^http:\/\/0.0.0.0/,/^http:\/\/localhost/" 2>&1 | tee htmlproofer.log
-          status=${PIPESTATUS[0]}
-          echo "htmlproofer output" >> "$GITHUB_STEP_SUMMARY"
-          sed -n '1,240p' htmlproofer.log >> "$GITHUB_STEP_SUMMARY"
-          while IFS= read -r line; do
-            echo "::error title=htmlproofer::$line"
-          done < <(rg -i 'failed|not found|missing|invalid|error|404|403' htmlproofer.log || true)
-          exit "$status"
+            \-\-ignore-urls "/^http:\/\/127.0.0.1/,/^http:\/\/0.0.0.0/,/^http:\/\/localhost/"
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
