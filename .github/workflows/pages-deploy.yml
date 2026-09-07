@@ -61,7 +61,7 @@ jobs:
           sed -n '1,240p' htmlproofer.log >> "$GITHUB_STEP_SUMMARY"
           while IFS= read -r line; do
             echo "::error title=htmlproofer::$line"
-          done < <(sed -n '80,400p' htmlproofer.log)
+          done < <(rg -i 'failed|not found|missing|invalid|error|404|403' htmlproofer.log || true)
           exit "$status"
 
       - name: Upload site artifact
